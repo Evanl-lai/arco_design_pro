@@ -1,5 +1,5 @@
+import Home from './home';
 import Dashboard from './dashboard';
-
 import List from './list';
 import Form from './form';
 import Profile from './profile';
@@ -7,10 +7,11 @@ import Visualization from './visualization';
 import Result from './result';
 import Exception from './exception';
 import User from './user';
+import Training from "./training"
 
 export default [
+  Home,
   Dashboard,
-
   Visualization,
   List,
   Form,
@@ -18,4 +19,5 @@ export default [
   Result,
   Exception,
   User,
+  Training
 ];

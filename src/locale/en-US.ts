@@ -29,6 +29,7 @@ import localeUserSetting from '@/views/user/setting/locale/en-US';
 import localeSettings from './en-US/settings';
 
 export default {
+  'menu.home':'home',
   'menu.dashboard': 'Dashboard',
   'menu.list': 'List',
   'menu.result': 'Result',
@@ -39,6 +40,7 @@ export default {
   'menu.user': 'User Center',
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
+  'menu.training':'Template training',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,

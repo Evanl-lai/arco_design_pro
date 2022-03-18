@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, ref, watch, h, compile, computed } from 'vue';
+import { defineComponent, ref, watch, h, compile, computed ,nextTick} from 'vue';
 import { useI18n } from 'vue-i18n';
 import {
   useRouter,
@@ -26,10 +26,12 @@ export default defineComponent({
     });
     const menuTree = computed(() => {
       const copyRouter = JSON.parse(JSON.stringify(appRoute.value.children));
+      // console.log(copyRouter);
       function travel(_routes: RouteRecordRaw[], layer: number) {
         if (!_routes) return null;
         const collector: any = _routes.map((element) => {
           // no access
+          // debugger
           if (!permission.accessRouter(element)) {
             return null;
           }
@@ -62,6 +64,7 @@ export default defineComponent({
 
           return null;
         });
+        // console.log(collector);
         return collector.filter(Boolean);
       }
       return travel(copyRouter, 0);
@@ -79,10 +82,19 @@ export default defineComponent({
     watch(
       route,
       (newVal) => {
+        // console.log(newVal);
         if (newVal.meta.requiresAuth && !newVal.meta.hideInMenu) {
           const key = newVal.matched[2]?.name as string;
           selectedKey.value = [key];
         }
+        nextTick(()=>{
+          if(newVal.meta.locale === "menu.home"){
+          document.querySelector('.arco-menu-inner > .arco-menu-item')?.classList.add("arco-menu-selected")
+        }
+        else{
+          document.querySelector('.arco-menu-inner > .arco-menu-item')?.classList.remove("arco-menu-selected")
+        }
+        })
       },
       {
         immediate: true,
@@ -105,10 +117,31 @@ export default defineComponent({
       function travel(_route: RouteRecordRaw[], nodes = []) {
         if (_route) {
           _route.forEach((element) => {
+            // console.log(element);
             // This is demo, modify nodes as needed
             const icon = element?.meta?.icon ? `<${element?.meta?.icon}/>` : ``;
             const r = (
-              <a-sub-menu
+              // <a-sub-menu
+              //   key={element?.name}
+              //   v-slots={{
+              //     icon: () => h(compile(icon)),
+              //     title: () => h(compile(t(element?.meta?.locale || ''))),
+              //   }}
+              //   onClick={() => element.name === "home" &&  goto(element)}
+              // >
+              //   {element?.children?.map((elem) => {
+              //     return (
+              //       <a-menu-item key={elem.name} onClick={() => goto(elem)}>
+              //         {t(elem?.meta?.locale || '')}
+              //         {travel(elem.children ?? [])}
+              //       </a-menu-item>
+              //     );
+              //   })}
+              // </a-sub-menu>
+              <>
+              {
+                element?.children?.length as any > 0 ? 
+                 <a-sub-menu
                 key={element?.name}
                 v-slots={{
                   icon: () => h(compile(icon)),
@@ -123,13 +156,31 @@ export default defineComponent({
                     </a-menu-item>
                   );
                 })}
-              </a-sub-menu>
+              </a-sub-menu> : 
+              <a-menu-item key={element.name} 
+              v-slots={{
+                  icon: () => h(compile(icon)),
+                  title: () => h(compile(t(element?.meta?.locale || ''))),
+                }}
+              onClick={() => {goto(element)}}>
+                      {t(element?.meta?.locale || '')}
+                      {travel(element.children ?? [])}
+              </a-menu-item>
+              }
+              </>
+              
+              
+
             );
             nodes.push(r as never);
           });
         }
+        // console.log("nodes",nodes);
         return nodes;
       }
+      // console.log(menuTree.value);
+      // console.log(travel(menuTree.value));
+      // console.log(process.env);
       return travel(menuTree.value);
     };
     return () => (

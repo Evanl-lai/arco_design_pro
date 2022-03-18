@@ -8,16 +8,19 @@ export default mergeConfig(
     server: {
       open: true,
       fs: {
-        strict: true,
+        strict: false,
       },
     },
+    define: {
+      "process.env": {
+        'VITE_API_URL': 'www.baidu.com22'
+      }
+    },
     plugins: [
-      eslint({
-        cache: false,
-        include: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.vue'],
-        exclude: ['node_modules'],
-      }),
+      // eslint({
+      //   cache: false,
+      //   // include: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.vue'],
+      //   exclude: ['node_modules'],
+      // }),
     ],
-  },
-  baseConig
-);
+  }, baseConig);

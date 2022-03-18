@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --config ./config/vite.config.dev.ts",
-    "build": "vue-tsc --noEmit && vite build --config ./config/vite.config.prod.ts",
+    "qa": "vite --config ./config/vite.config.qa.ts --mode qa",
+    "build": "vite build --config ./config/vite.config.prod.ts",
+    "build:dev": "vite build --config ./config/vite.config.dev.ts",
     "lint-staged": "npx lint-staged",
     "prepare": "husky install"
   },
@@ -35,6 +37,7 @@
     "echarts": "^5.2.2",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
+    "ol": "^6.13.0",
     "pinia": "^2.0.9",
     "query-string": "^7.0.1",
     "vue": "^3.2.16",
